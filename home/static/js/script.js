@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     -------------------------------------------------
     Esta seção inicializa o carrossel da biblioteca Swiper.js,
     com lógica para se adaptar à quantidade de slides disponíveis.
-    ---------------------------------
+    -------------------------------------------------
     */
 
     const tournamentSwiperContainer = document.querySelector('.tournament-swiper'); // Seleciona o contêiner principal do carrossel.
@@ -59,34 +59,62 @@ document.addEventListener('DOMContentLoaded', function () {
     // Apenas executa a lógica se o contêiner do carrossel existir na página atual.
     if (tournamentSwiperContainer) {
         const slides = tournamentSwiperContainer.querySelectorAll('.swiper-slide'); // Conta quantos slides existem dentro do contêiner.
-        const slidesPerView = 5; // Define o número de slides que queremos que fiquem visíveis ao mesmo tempo.
+
+        // REMOVIDO: a variável 'slidesPerView' fixa foi removida para dar lugar à configuração responsiva.
+        // const slidesPerView = 5;
 
         // Cria um objeto com as configurações base do Swiper.
         let swiperOptions = {
-            effect: 'slide', // Define o efeito de transição padrão.
-            slidesPerView: slidesPerView, // Define quantos slides são visíveis por vez.
-            centeredSlides: true, // Centraliza o slide ativo.
-            spaceBetween: 15, // Define o espaço em pixels entre os slides.
-            grabCursor: true, // Mostra um ícone de "mão" para indicar que o carrossel é arrastável.
-            navigation: { // Habilita e configura os botões de navegação (setas).
-                nextEl: '.swiper-button-next', // Seletor do botão "próximo".
-                prevEl: '.swiper-button-prev', // Seletor do botão "anterior".
+            effect: 'slide',
+            centeredSlides: true,
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
+
+            // ⭐ NOVO: Bloco de breakpoints para responsividade.
+            // Esta é a correção principal. O Swiper aplicará as configurações abaixo
+            // de acordo com a largura da tela do usuário.
+            breakpoints: {
+                // Em telas de 0px até 768px
+                0: {
+                    slidesPerView: 1.2, // Mostra 1 slide completo e um pedaço do próximo
+                    spaceBetween: 15    // Espaço menor entre os slides
+                },
+                // Em telas maiores que 768px
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 20
+                },
+                // Em telas maiores que 992px
+                992: {
+                    slidesPerView: 4,
+                    spaceBetween: 30
+                },
+                // Em telas maiores que 1200px
+                1200: {
+                    slidesPerView: 5,
+                    spaceBetween: 30
+                }
+            }
         };
 
-        // --- LÓGICA CONDICIONAL ---
-        // Só ativa o loop infinito e a reprodução automática se houver mais slides do que o visível.
-        if (slides.length > slidesPerView) {
-            swiperOptions.loop = true; // Ativa o modo de loop infinito.
-            swiperOptions.autoplay = { // Configura a reprodução automática.
-                delay: 3000, // Define o tempo de espera de 3 segundos entre as transições.
-                disableOnInteraction: false, // Não para o autoplay após interação manual do usuário.
-                pauseOnMouseEnter: true, // Pausa o autoplay quando o mouse está sobre o carrossel.
+        // --- LÓGICA CONDICIONAL AJUSTADA ---
+        // Ativa o loop e autoplay se houver um número razoável de slides (ex: mais de 3).
+        // Isso funciona melhor com a configuração responsiva.
+        if (slides.length > 3) {
+            swiperOptions.loop = true;
+            swiperOptions.autoplay = {
+                delay: 4000, // Aumentei um pouco o tempo para o usuário poder ver o slide ativo com calma
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
             };
         } else {
-            // Se não houver slides suficientes, desativa a centralização.
-            // Isso evita que poucos slides fiquem centralizados com espaços vazios nas laterais.
-            swiperOptions.centeredSlides = false;
+            // Se houver poucos slides, desativamos o loop para evitar comportamento estranho
+            // e mantemos a centralização para um bom alinhamento.
+            swiperOptions.loop = false;
+            swiperOptions.autoplay = false;
         }
 
         // Finalmente, inicializa o Swiper no contêiner especificado com as opções configuradas.
@@ -97,21 +125,18 @@ document.addEventListener('DOMContentLoaded', function () {
     /*
     -------------------------------------------------
     SEÇÃO: LÓGICA DO PLAYER DE VÍDEO DO YOUTUBE
-    -------------------------------------------------
-    Esta seção implementa um "lazy load" para os vídeos.
-    O vídeo só é carregado quando o usuário clica na thumbnail,
-    melhorando o desempenho inicial da página.
+    (Nenhuma alteração necessária aqui)
     -------------------------------------------------
     */
 
-    const players = document.querySelectorAll('.youtube-player'); // Seleciona todos os contêineres de vídeo.
-    players.forEach(playerContainer => { // Itera sobre cada contêiner de vídeo encontrado.
-        playerContainer.addEventListener('click', function () { // Adiciona um ouvinte de clique a cada um.
-            const iframe = this.querySelector('iframe'); // Encontra o elemento iframe dentro do contêiner clicado.
-            if (iframe) { // Verifica se o iframe existe.
-                const videoSrc = iframe.getAttribute('data-src'); // Pega a URL do vídeo armazenada no atributo 'data-src'.
-                iframe.setAttribute('src', videoSrc + '?autoplay=1&mute=1'); // Define o atributo 'src' do iframe com a URL, adicionando parâmetros para autoplay e mudo.
-                this.classList.add('playing'); // Adiciona a classe 'playing' ao contêiner para remover a thumbnail e o ícone de play via CSS.
+    const players = document.querySelectorAll('.youtube-player');
+    players.forEach(playerContainer => {
+        playerContainer.addEventListener('click', function () {
+            const iframe = this.querySelector('iframe');
+            if (iframe) {
+                const videoSrc = iframe.getAttribute('data-src');
+                iframe.setAttribute('src', videoSrc + '?autoplay=1&mute=1');
+                this.classList.add('playing');
             }
         });
     });
@@ -119,60 +144,50 @@ document.addEventListener('DOMContentLoaded', function () {
     /*
     -------------------------------------------------
     SEÇÃO: VALIDAÇÃO DE FORMULÁRIOS (BOOTSTRAP)
-    -------------------------------------------------
-    Ativa a validação nativa do Bootstrap nos formulários que
-    possuem a classe `.needs-validation`.
+    (Nenhuma alteração necessária aqui)
     -------------------------------------------------
     */
 
-    const formsToValidate = document.querySelectorAll('.needs-validation'); // Seleciona todos os formulários que precisam de validação.
-    Array.from(formsToValidate).forEach(form => { // Itera sobre cada formulário encontrado.
-        form.addEventListener('submit', event => { // Adiciona um ouvinte para o evento de envio do formulário.
-            if (!form.checkValidity()) { // Verifica se o formulário NÃO é válido de acordo com as regras do HTML (ex: required, type="email").
-                event.preventDefault(); // Impede o envio do formulário.
-                event.stopPropagation(); // Impede que o evento se propague para elementos "pai".
+    const formsToValidate = document.querySelectorAll('.needs-validation');
+    Array.from(formsToValidate).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
             }
-            form.classList.add('was-validated'); // Adiciona a classe que exibe os feedbacks de validação (mensagens de erro/sucesso) do Bootstrap.
+            form.classList.add('was-validated');
         }, false);
     });
 
     /*
     -------------------------------------------------
     SEÇÃO: CAMPOS CONDICIONAIS EM FORMULÁRIOS
-    -------------------------------------------------
-    Mostra ou esconde o campo de upload de imagem com base
-    na seleção do tipo de postagem (Discussão vs. Imagem).
+    (Nenhuma alteração necessária aqui)
     -------------------------------------------------
     */
-   
-    const typeDiscussionRadio = document.getElementById('id_tipo_0'); // Seleciona o botão de rádio para "Discussão".
-    const typeImageRadio = document.getElementById('id_tipo_1'); // Seleciona o botão de rádio para "Imagem".
-    const imageUploadField = document.getElementById('imageUploadField'); // Seleciona o contêiner do campo de upload.
 
-    // Executa a lógica apenas se todos os elementos necessários existirem na página.
+    const typeDiscussionRadio = document.getElementById('id_tipo_0');
+    const typeImageRadio = document.getElementById('id_tipo_1');
+    const imageUploadField = document.getElementById('imageUploadField');
+
     if (typeDiscussionRadio && typeImageRadio && imageUploadField) {
-        // Seleciona o campo de input do arquivo.
         const fileInput = document.getElementById('id_arquivo');
 
-        // Função para mostrar ou esconder o campo de upload.
         function toggleImageUploadField() {
-            if (typeImageRadio.checked) { // Se a opção "Imagem" estiver marcada:
-                imageUploadField.style.display = 'block'; // Mostra o contêiner do campo de upload.
-                if (fileInput) fileInput.required = true; // Torna o campo de arquivo obrigatório.
-            } else { // Se qualquer outra opção (Discussão) estiver marcada:
-                imageUploadField.style.display = 'none'; // Esconde o contêiner do campo de upload.
-                if (fileInput) { // Se o campo de arquivo existir:
-                    fileInput.required = false; // Remove a obrigatoriedade do campo.
-                    fileInput.value = ''; // Limpa qualquer arquivo que já tenha sido selecionado para evitar envio acidental.
+            if (typeImageRadio.checked) {
+                imageUploadField.style.display = 'block';
+                if (fileInput) fileInput.required = true;
+            } else {
+                imageUploadField.style.display = 'none';
+                if (fileInput) {
+                    fileInput.required = false;
+                    fileInput.value = '';
                 }
             }
         }
 
-        // Executa a função uma vez no carregamento da página para definir o estado inicial correto.
         toggleImageUploadField();
-
-        // Adiciona ouvintes de evento para os botões de rádio.
-        typeDiscussionRadio.addEventListener('change', toggleImageUploadField); // Executa a função sempre que a seleção mudar para "Discussão".
-        typeImageRadio.addEventListener('change', toggleImageUploadField); // Executa a função sempre que a seleção mudar para "Imagem".
+        typeDiscussionRadio.addEventListener('change', toggleImageUploadField);
+        typeImageRadio.addEventListener('change', toggleImageUploadField);
     }
 });
