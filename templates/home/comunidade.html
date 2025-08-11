@@ -1,0 +1,293 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comunidade - Universo Gamer</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="{% static '/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/comunidade.css' %}" />
+</head>
+
+<body>
+    <header>
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a href="/" class="navbar-brand logo">Universo Gamer</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-content"
+                    aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="nav-content">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#games">Jogos</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page"
+                                href="/comunidade">Comunidade</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#tournaments">Torneios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#footer">Contato</a></li>
+                    </ul>
+                    <div class="d-flex ms-lg-3">
+                        {% if user.is_authenticated %}
+                        <span class="navbar-text text-white me-3">Olá, {{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="btn btn-secondary me-2">Sair</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-secondary me-2">Entrar</a>
+                        <a href="{% url 'register' %}" class="btn btn-primary">Criar Conta</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="mt-5 pt-4">
+        <section class="community-header position-relative">
+            <video autoplay muted loop playsinline class="background-video">
+                <source src="{% static 'video/mmorpg.mp4' %}" type="video/mp4" />
+            </video>
+            <div class="container text-center text-white position-relative py-5">
+                <h1 class="display-4 fw-bolder">Bem-vindo à Comunidade</h1>
+                <p class="lead">Discuta, partilhe e conecte-se com outros jogadores.</p>
+            </div>
+        </section>
+
+        <section id="community-hub" class="section bg-dark text-white py-5">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                    <h2 class="section-title text-white mb-0 text-start">Feed da Comunidade</h2>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoTopicoModal">
+                        <i class="fas fa-plus me-2"></i>Criar Publicação
+                    </button>
+                </div>
+
+                <div class="d-flex flex-column gap-4">
+
+                    {% for post in posts %}
+    <div class="card topic-card image-post-card" id="{{ post.id }}"> 
+                        <div class="card-header d-flex align-items-center">
+                            <img src="https://i.pravatar.cc/150?u={{ post.autor.username }}" alt="Avatar"
+                                class="author-avatar rounded-circle" style="width:40px; height:40px;">
+                            <div class="ms-2">
+                                <h5 class="mb-0">{{ post.titulo }}</h5>
+                                <small class="text-muted">
+                                    por <a href="#" class="text-primary text-decoration-none">{{ post.autor }}</a> -
+                                    {{ post.criado_em|timesince }} atrás
+                                </small>
+                            </div>
+                        </div>
+
+                        {% if post.tipo == "media" and post.arquivo %}
+                            {% if ".mp4" in post.arquivo.url|lower %}
+                            <video class="card-img-top" controls>
+                                <source src="{{ post.arquivo.url }}" type="video/mp4" />
+                            </video>
+                            {% else %}
+                            <img src="{{ post.arquivo.url }}" class="card-img-top" alt="Imagem postada" />
+                            {% endif %}
+                        {% endif %}
+
+                        <div class="card-body">
+                            <p class="card-text">{{ post.conteudo|linebreaksbr }}</p>
+                        </div>
+
+                        <div class="card-footer d-flex gap-3">
+                            <!-- Curtir -->
+                            <a href="/comunidade/post/{{ post.id }}/like/" class="topic-action text-decoration-none d-flex align-items-center">
+                                <i class="fas fa-heart me-1 {% if user.is_authenticated and user in post.likes.all %} text-danger{% endif %}"></i>
+                                <span>{{ post.likes.count }}</span>
+                            </a>
+
+                            <!-- Comentários: toggle collapse -->
+                            <a href="#" class="topic-action text-decoration-none d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#comentarios-{{ post.id }}" aria-expanded="false" aria-controls="comentarios-{{ post.id }}">
+                                <i class="fas fa-comment-alt me-1"></i>
+                                <span>{{ post.comentarios.count }} Comentários</span>
+                            </a>
+
+                            <!-- Compartilhar -->
+                            <a  href="/comunidade/post/{{ post.id }}/compartilhar/" class="topic-action text-decoration-none d-flex align-items-center">
+                                <i class="fas fa-share-square me-1"></i>
+                                <span>{{ post.compartilhamentos.count }}</span>
+                            </a>
+                        </div>
+
+                        <!-- Área de comentários colapsável -->
+                        <div class="collapse mt-3" id="comentarios-{{ post.id }}">
+                            <div class="comments-list mb-3">
+                                {% for comment in post.comentarios.all %}
+                                <div class="comment border-bottom pb-2 mb-2">
+                                    <strong>{{ comment.autor.username }}</strong> disse:<br />
+                                    <p class="mb-1">{{ comment.conteudo|linebreaksbr }}</p>
+                                    <small class="text-muted">{{ comment.criado_em|timesince }} atrás</small>
+                                </div>
+                                {% empty %}
+                                <p>Sem comentários ainda.</p>
+                                {% endfor %}
+                            </div>
+
+                            {% if user.is_authenticated %}
+                            <form action="post/{{post.id}}/comentar/" method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <textarea name="conteudo" rows="2" class="form-control" placeholder="Escreva um comentário..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Comentar</button>
+                            </form>
+                            {% else %}
+                            <p><a href="{% url 'login' %}">Entre</a> para comentar.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-white">Nenhuma publicação ainda. Seja o primeiro!</p>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer" class="footer bg-dark text-white pt-5">
+        <div class="container text-center text-md-start">
+            <div class="row text-center text-md-start">
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Universo Gamer</h5>
+                    <p>Sua central definitiva para tudo sobre o mundo dos jogos de PC. Junte-se à nossa comunidade!</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-floating m-1"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-primary btn-floating m-1"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-primary btn-floating m-1"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Links Úteis</h5>
+                    <p><a href="#" class="text-white">Sobre Nós</a></p>
+                    <p><a href="#" class="text-white">Suporte</a></p>
+                    <p><a href="#" class="text-white">Termos de Serviço</a></p>
+                    <p><a href="#" class="text-white">Política de Privacidade</a></p>
+                </div>
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Junte-se à nossa Newsletter</h5>
+                    <p>Receba as últimas notícias, lançamentos e ofertas diretamente no seu e-mail.</p>
+                    <form class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Seu melhor e-mail" aria-label="Seu e-mail" />
+                        <button class="btn btn-primary" type="submit">Inscrever-se</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p class="mb-0">© 2025 Universo Gamer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal para criar nova publicação (seu código já existente) -->
+    <div class="modal fade" id="novoTopicoModal" tabindex="-1" aria-labelledby="novoTopicoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="novoTopicoModalLabel">Criar Nova Publicação</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form id="newPostForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    <div class="modal-body">
+                        <!-- seu formulário aqui, igual antes -->
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Publicação</label><br />
+                            <div class="btn-group" role="group" aria-label="Tipo de Publicação">
+                                {% for radio in form.tipo %}
+                                {{ radio.tag }}
+                                <label class="btn btn-outline-primary" for="{{ radio.id_for_label }}">
+                                    {% if radio.choice_label == "Discussão" %}
+                                    <i class="fas fa-comments me-2"></i>{{ radio.choice_label }}
+                                    {% else %}
+                                    <i class="fas fa-image me-2"></i>{{ radio.choice_label }}
+                                    {% endif %}
+                                </label>
+                                {% endfor %}
+                            </div>
+                            {% if form.tipo.errors %}
+                            <div class="invalid-feedback d-block">{{ form.tipo.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <hr />
+
+                        <div class="mb-3">
+                            <label for="{{ form.titulo.id_for_label }}" class="form-label">Título</label>
+                            {{ form.titulo }}
+                            {% if form.titulo.errors %}
+                            <div class="invalid-feedback d-block">{{ form.titulo.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3" id="imageUploadField" style="display: none;">
+                            <label for="{{ form.arquivo.id_for_label }}" class="form-label">Imagem ou Vídeo</label>
+                            {{ form.arquivo }}
+                            {% if form.arquivo.errors %}
+                            <div class="invalid-feedback d-block">{{ form.arquivo.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.categoria.id_for_label }}" class="form-label">Categoria</label>
+                            {{ form.categoria }}
+                            {% if form.categoria.errors %}
+                            <div class="invalid-feedback d-block">{{ form.categoria.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.conteudo.id_for_label }}" class="form-label">Conteúdo</label>
+                            {{ form.conteudo }}
+                            {% if form.conteudo.errors %}
+                            <div class="invalid-feedback d-block">{{ form.conteudo.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Publicar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const typeDiscussionRadio = document.getElementById('type-discussion');
+            const typeImageRadio = document.getElementById('type-image');
+            const imageUploadField = document.getElementById('imageUploadField');
+            const fileInput = document.getElementById('topicoArquivo');
+
+            function toggleImageUploadField() {
+                if (typeImageRadio.checked) {
+                    imageUploadField.style.display = 'block';
+                    fileInput.required = true;
+                } else {
+                    imageUploadField.style.display = 'none';
+                    fileInput.required = false;
+                    fileInput.value = '';
+                }
+            }
+
+            typeDiscussionRadio.addEventListener('change', toggleImageUploadField);
+            typeImageRadio.addEventListener('change', toggleImageUploadField);
+        });
+    </script>
+</body>
+
+</html>

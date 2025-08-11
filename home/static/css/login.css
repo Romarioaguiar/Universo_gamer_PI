@@ -1,0 +1,108 @@
+/* --- SEÇÃO: FUNDO DE VÍDEO --- */
+/* Cria um fundo de vídeo que cobre toda a tela e permanece fixo. */
+
+.video-background {
+    position: fixed; /* Posiciona o contêiner do vídeo de forma fixa em relação à janela de visualização. */
+    top: 0; /* Alinha o contêiner ao topo da tela. */
+    left: 0; /* Alinha o contêiner à esquerda da tela. */
+    width: 100vw; /* Define a largura para 100% da largura da janela (viewport width). */
+    height: 100vh; /* Define a altura para 100% da altura da janela (viewport height). */
+    overflow: hidden; /* Esconde qualquer parte do vídeo que exceda as dimensões da tela. */
+    z-index: -2; /* Coloca o vídeo na camada mais baixa, atrás da sobreposição e do conteúdo. */
+}
+
+.video-background video {
+    width: 100%; /* Garante que o elemento de vídeo preencha toda a largura de seu contêiner. */
+    height: 100%; /* Garante que o elemento de vídeo preencha toda a altura de seu contêiner. */
+    object-fit: cover; /* Redimensiona o vídeo para cobrir todo o contêiner, mantendo sua proporção e cortando o excesso. */
+}
+
+/* --- SEÇÃO: CORPO DA PÁGINA E SOBREPOSIÇÃO (OVERLAY) --- */
+/* Estiliza o `body` e cria uma camada escura sobre o vídeo para melhorar a legibilidade. */
+
+.login-page-body {
+    position: relative; /* Define o posicionamento relativo para que o pseudo-elemento `::before` possa ser posicionado corretamente. */
+    background-color: #0e0f14; /* Define uma cor de fundo escura como fallback, caso o vídeo não carregue ou falhe. */
+}
+
+.login-page-body::before { 
+    content: ''; /* Adiciona um pseudo-elemento; é obrigatório para que a regra funcione. */
+    position: fixed; /* Posiciona a sobreposição de forma fixa, para que cubra a tela inteira independentemente da rolagem. */
+    top: 0; /* Alinha a sobreposição ao topo. */
+    left: 0; /* Alinha a sobreposição à esquerda. */
+    width: 100%; /* Define a largura para 100% da tela. */
+    height: 100%; /* Define a altura para 100% da tela. */
+    background-color: rgba(14, 15, 20, 0.55); /* Cria uma sobreposição preta com 55% de opacidade. */
+    z-index: -1; /* Posiciona a sobreposição entre o conteúdo da página e o vídeo de fundo (que tem z-index: -2). */
+}
+
+/* --- SEÇÃO: CABEÇALHO (HEADER) --- */
+/* Deixa o cabeçalho transparente especificamente na página de login. */
+
+/* Usa um seletor mais específico para sobrescrever os estilos padrão do header sem precisar usar `!important`. */
+
+body.login-page-body .header.fixed-top {
+    background-color: transparent; /* Remove a cor de fundo do cabeçalho. */
+    backdrop-filter: none; /* Remove o efeito de desfoque (blur) do cabeçalho. */
+    border-bottom: none; /* Remove a borda inferior do cabeçalho. */
+}
+
+/* --- SEÇÃO: CARD DE LOGIN --- */
+/* Estiliza o card central onde o formulário de login está contido. */
+
+.login-card {
+    background: rgba(24, 26, 32, 0.9); /* Fundo escuro com 90% de opacidade, criando um efeito de vidro semitransparente. */
+    border: 1px solid #2c2f3b; /* Adiciona uma borda sutil ao card. */
+    border-radius: 12px; /* Arredonda os cantos do card. */
+    width: 90%; /* Define a largura do card como 90% do seu contêiner pai. */
+    max-width: 500px; /* Limita a largura máxima do card em telas grandes para manter a proporção. */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Adiciona uma sombra projetada para dar profundidade e destacar o card. */
+    backdrop-filter: blur(5px); /* Aplica um efeito de desfoque (vidro fosco) ao que está atrás do card. */
+    -webkit-backdrop-filter: blur(5px); /* Prefixo para garantir compatibilidade com navegadores baseados em WebKit (Safari). */
+}
+
+.login-card .card-title {
+    color: var(--bs-primary); /* Define a cor do título do card usando a variável de cor primária. */
+    font-size: 2rem; /* Aumenta o tamanho da fonte do título. */
+    font-weight: 700; /* Define o peso da fonte como negrito. */
+}
+
+.login-card .card-text, .login-card p {
+    color: #a0a8b2; /* Define a cor do texto de suporte como um cinza claro. */
+}
+
+/* --- SEÇÃO: ESTILIZAÇÃO DOS CAMPOS DO FORMULÁRIO --- */
+/* Personaliza a aparência dos labels e inputs dentro do card de login. */
+
+.form-label {
+    color: #e0e0e0; /* Define a cor do texto dos rótulos (labels) como um branco suave. */
+    font-weight: bold; /* Deixa o texto do rótulo em negrito. */
+}
+
+.form-control {
+    padding: 0.8rem 1rem; /* Define o preenchimento interno dos campos de input para torná-los maiores. */
+    background-color: #0e0f14; /* Define a cor de fundo dos campos para um tom escuro. */
+    border: 1px solid #3a3f4c; /* Define uma borda sutil para os campos. */
+    color: #fff; /* Define a cor do texto digitado pelo usuário como branco. */
+    font-size: 1rem; /* Define o tamanho da fonte do texto dentro do campo. */
+}
+
+.form-control:focus { /* Estilos aplicados quando o campo de formulário está em foco (selecionado). */
+    background-color: #0e0f14; /* Mantém a cor de fundo escura. */
+    color: #fff; /* Mantém a cor do texto branca. */
+    border-color: var(--bs-primary); /* Muda a cor da borda para a cor primária, indicando foco. */
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.4); /* Adiciona um brilho sutil ao redor do campo para maior destaque. */
+}
+
+/* --- SEÇÃO: RODAPÉ DO FORMULÁRIO (LINKS) --- */
+/* Estiliza os links no final do card, como "Esqueceu a senha?" ou "Criar conta". */
+
+.login-card a {
+    color: var(--bs-primary); /* Define a cor dos links usando a variável de cor primária. */
+    font-weight: bold; /* Deixa o texto dos links em negrito. */
+    text-decoration: none; /* Remove o sublinhado padrão dos links. */
+}
+
+.login-card a:hover {
+    text-decoration: underline; /* Adiciona um sublinhado ao passar o mouse, indicando que é um link clicável. */
+}

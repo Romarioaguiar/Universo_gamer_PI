@@ -1,0 +1,157 @@
+/* --- SEÇÃO: ESTILOS GERAIS DA PÁGINA --- */
+/* Ajustes aplicados ao corpo da página para acomodar elementos fixos. */
+
+body {
+    padding-top: 75px; /* Adiciona um preenchimento no topo do `body` para compensar a altura da barra de navegação fixa ('fixed-top'). */
+}
+
+/* --- SEÇÃO: CABEÇALHO COM VÍDEO DE FUNDO --- */
+/* Estilos para o cabeçalho principal da página, que apresenta um vídeo em segundo plano. */
+
+.community-header {
+    position: relative; /* Define o posicionamento relativo para que filhos com 'position: absolute' (como o vídeo e a sobreposição) se posicionem em relação a ele. */
+    height: 40vh; /* Define a altura do cabeçalho como 40% da altura da tela (viewport height). */
+    display: flex; /* Ativa o layout flexbox para permitir o alinhamento dos itens filhos. */
+    align-items: center; /* Centraliza o conteúdo (título) verticalmente dentro do cabeçalho. */
+    justify-content: center; /* Centraliza o conteúdo (título) horizontalmente dentro do cabeçalho. */
+    overflow: hidden; /* Esconde qualquer parte do vídeo de fundo que exceda as dimensões do cabeçalho, evitando barras de rolagem indesejadas. */
+}
+
+.background-video {
+    position: absolute; /* Remove o vídeo do fluxo normal do documento para posicioná-lo livremente dentro do `.community-header`. */
+    top: 50%; /* Posiciona o topo do vídeo no meio do contêiner pai. */
+    left: 50%; /* Posiciona a esquerda do vídeo no meio do contêiner pai. */
+    min-width: 100%; /* Garante que a largura do vídeo seja no mínimo a largura total do contêiner, cobrindo-o completamente. */
+    min-height: 100%; /* Garante que a altura do vídeo seja no mínimo a altura total do contêiner, cobrindo-o completamente. */
+    width: auto; /* Permite que a largura do vídeo se ajuste para manter sua proporção original. */
+    height: auto; /* Permite que a altura do vídeo se ajuste para manter sua proporção original. */
+    z-index: -1; /* Coloca o vídeo na camada mais baixa, atrás de todo o outro conteúdo no cabeçalho. */
+    transform: translateX(-50%) translateY(-50%); /* Centraliza o vídeo perfeitamente no contêiner, compensando o posicionamento top/left 50%. */
+}
+
+.community-header::after { 
+    content: ''; /* Adiciona um pseudo-elemento; é obrigatório para que a regra funcione. */
+    position: absolute; /* Posiciona a sobreposição em relação ao `.community-header`. */
+    top: 0; /* Alinha a sobreposição ao topo do cabeçalho. */
+    left: 0; /* Alinha a sobreposição à esquerda do cabeçalho. */
+    right: 0; /* Alinha a sobreposição à direita do cabeçalho. */
+    bottom: 0; /* Alinha a sobreposição à base do cabeçalho. */
+    background: rgba(0, 0, 0, 0.5); /* Cria uma sobreposição preta com 50% de opacidade para escurecer o vídeo. */
+    z-index: 0; /* Coloca a sobreposição acima do vídeo (z-index: -1) e abaixo do texto (que terá z-index: 1 por padrão). */
+}
+
+/* --- SEÇÃO: ESTILOS PARA OS CARDS DE PUBLICAÇÕES --- */
+/* Define a aparência dos cards que exibem cada tópico ou postagem da comunidade. */
+
+.topic-card {
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Adiciona uma borda sutil e semitransparente ao card. */
+    background-color: #1e1e1e; /* Define uma cor de fundo escura para o card, similar ao tema geral. */
+    color: #f8f9fa; /* Define a cor do texto principal como um cinza claro (quase branco). */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Adiciona uma transição suave para os efeitos de hover (elevação e sombra). */
+    border-radius: 0.5rem; /* Arredonda os cantos do card. */
+}
+
+.topic-card:hover {
+    transform: translateY(-5px); /* Move o card 5 pixels para cima ao passar o mouse sobre ele, criando um efeito de "flutuar". */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Adiciona uma sombra mais pronunciada para criar um efeito de profundidade. */
+}
+
+.topic-card .card-header {
+    background-color: rgba(0, 0, 0, 0.2); /* Define um fundo escuro e semitransparente para o cabeçalho do card. */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Adiciona uma linha divisória sutil na parte inferior do cabeçalho. */
+    gap: 15px; /* Adiciona um espaço de 15px entre os itens flex (avatar e texto) no cabeçalho. */
+}
+
+.author-avatar {
+    width: 40px; /* Define a largura da imagem do avatar. */
+    height: 40px; /* Define a altura da imagem do avatar. */
+    border-radius: 50%; /* Torna a imagem do avatar perfeitamente circular. */
+    object-fit: cover; /* Garante que a imagem do avatar cubra o espaço sem distorcer, cortando o excesso se necessário. */
+    border: 2px solid var(--bs-primary); /* Adiciona uma borda com a cor primária do tema para destaque. */
+}
+
+.topic-card .card-header h5 {
+    font-size: 1.1rem; /* Define um tamanho de fonte específico para o título da publicação no cabeçalho. */
+}
+
+.topic-card .card-img-top { 
+    max-height: 70vh; /* Limita a altura máxima da mídia a 70% da altura da tela para não ocupar um espaço excessivo. */
+    object-fit: cover; /* Faz a mídia cobrir a área disponível, mantendo a proporção e cortando o excesso. */
+    width: 100%; /* Garante que a mídia ocupe toda a largura do card. */
+    border-radius: 0; /* Remove o arredondamento que o Bootstrap pode aplicar, para que a imagem se alinhe perfeitamente às bordas do card. */
+}
+
+.topic-card .card-body {
+    color: #e0e0e0; /* Define uma cor de texto um pouco mais suave para o corpo do card, para diferenciar do título. */
+    font-size: 0.95rem; /* Define um tamanho de fonte ligeiramente menor para o corpo do texto. */
+    line-height: 1.6; /* Aumenta o espaçamento entre as linhas do texto para melhorar a legibilidade. */
+}
+
+.topic-card .card-footer {
+    background-color: transparent; /* Deixa o fundo do rodapé do card transparente, mantendo a cor de fundo do card principal. */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Adiciona uma linha divisória sutil no topo do rodapé. */
+    display: flex; /* Ativa o flexbox para alinhar os botões de ação. */
+    align-items: center; /* Alinha verticalmente os itens no rodapé. */
+    gap: 1.5rem; /* Adiciona um espaço consistente entre os botões de ação (curtir, comentar). */
+    flex-wrap: wrap; /* Permite que os botões quebrem para a linha de baixo em telas pequenas, evitando sobreposição. */
+}
+
+/* --- SEÇÃO: BOTÕES DE AÇÃO (CURTIR, COMENTAR) --- */
+/* Estiliza os botões de interação localizados no rodapé de cada publicação. */
+
+.topic-action {
+    color: #adb5bd; /* Define a cor padrão cinza para os ícones e texto de ação. */
+    text-decoration: none; /* Remove o sublinhado padrão dos links. */
+    display: flex; /* Ativa o flexbox para alinhar o ícone e o número/texto. */
+    align-items: center; /* Alinha verticalmente o ícone e o texto. */
+    gap: 0.5rem; /* Adiciona um pequeno espaço entre o ícone e o texto. */
+    font-weight: 500; /* Define um peso de fonte médio. */
+    transition: color 0.2s; /* Adiciona uma transição suave para a mudança de cor no hover. */
+}
+
+.topic-action:hover {
+    color: var(--bs-primary); /* Muda a cor para a cor primária do tema ao passar o mouse, indicando interatividade. */
+}
+
+.topic-action.liked { 
+    color: #dc3545; /* Muda a cor para vermelho para indicar o estado "curtido". */
+    font-weight: bold; /* Deixa o texto em negrito para dar mais ênfase ao estado "curtido". */
+}
+
+.topic-action.liked:hover {
+    color: #ff5c6c; /* Define uma cor de hover um pouco mais clara para o estado "curtido". */
+}
+
+/* --- SEÇÃO: ESTILOS PARA O MODAL DE NOVA PUBLICAÇÃO --- */
+/* Personaliza a aparência do modal do Bootstrap para se adequar ao tema escuro. */
+
+.modal-content.bg-dark .modal-header,
+.modal-content.bg-dark .modal-footer {
+    border-color: rgba(255, 255, 255, 0.15); /* Define uma cor de borda mais clara para o cabeçalho e rodapé do modal escuro, melhorando a visibilidade. */
+}
+
+/* Esconde os inputs de rádio originais, pois vamos estilizar os labels como se fossem botões. */
+
+#novoTopicoModal .btn-group > input[type="radio"] {
+
+    display: none; /* Oculta o elemento de rádio padrão, tornando-o invisível mas ainda funcional. */
+}
+
+/* Estiliza o botão que está selecionado (ativado via seletor de irmão adjacente :checked + .btn) */
+
+#novoTopicoModal .btn-group > input[type="radio"]:checked + .btn {
+    background-color: var(--bs-primary); /* Aplica a cor de fundo primária ao botão (`<label>`) que segue o rádio selecionado. */
+    color: white; /* Define a cor do texto como branco para o botão selecionado. */
+    border-color: var(--bs-primary); /* Define a cor da borda igual à de fundo. */
+    box-shadow: none; /* Remove qualquer sombra para um visual mais limpo. */
+}
+
+/* --- SEÇÃO: ESTILOS PARA O RODAPÉ (COPYRIGHT) --- */
+/* Estilos para a área final da página, contendo informações de copyright. */
+
+.footer-copyright {
+    text-align: center; /* Centraliza o texto do copyright. */
+    padding: 1.5rem 0; /* Adiciona espaçamento vertical interno. */
+    margin-top: 2rem; /* Adiciona uma margem no topo para separar do conteúdo acima. */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Adiciona uma linha divisória sutil no topo do rodapé. */
+}

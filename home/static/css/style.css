@@ -1,0 +1,371 @@
+/* --- SEÇÃO DE IMPORTAÇÃO DE FONTES --- */
+/* Importa a fonte 'Roboto' do Google Fonts com os pesos regular, negrito e extra-negrito. */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+/* --- SEÇÃO DE VARIÁVEIS GLOBAIS (ROOT) --- */
+/* Redefine as variáveis padrão do Bootstrap para criar um tema escuro e personalizado. */
+
+:root {
+    --bs-primary: #00aaff; /* Define a cor primária principal do site (um tom de azul) */
+    --bs-secondary: #7d6c6c; /* Define a cor secundária (um tom de cinza) */
+    --bs-body-bg: #121212; /* Define a cor de fundo do corpo (body) para um tom escuro */
+    --bs-body-color: #ffffff; /* Define a cor do texto principal para branco */
+    --bs-dark-rgb: 18, 18, 18; /* Define o valor RGB da cor escura padrão do Bootstrap */
+    --bs-body-font-family: 'Roboto', sans-serif; /* Define a família de fontes padrão como 'Roboto' */
+    --bs-link-color-rgb: 255, 255, 255; /* Define o valor RGB da cor padrão dos links (branco) */
+    --bs-link-hover-color: #00aaff; /* Define a cor dos links ao passar o mouse (hover) */
+}
+
+/* --- SEÇÃO DE ESTILOS GERAIS E UTILITÁRIOS --- */
+/* Estilos aplicados a elementos base como `body` e classes utilitárias como `.section`. */
+
+body {
+    line-height: 1.6; /* Define a altura da linha para melhor legibilidade do texto */
+    display: flex; /* Usa flexbox para organizar o layout do corpo */
+    flex-direction: column; /* Organiza os filhos diretos (header, main, footer) em coluna */
+    min-height: 100vh; /* Garante que o corpo ocupe no mínimo 100% da altura da tela (viewport) */
+}
+
+main {
+    flex-grow: 1; /* Faz o conteúdo principal crescer e ocupar o espaço disponível, empurrando o rodapé para baixo */
+}
+
+.btn-primary {
+    --bs-btn-hover-bg: #0088cc; /* Define a cor de fundo do botão primário no estado hover */
+    --bs-btn-hover-border-color: #0088cc; /* Define a cor da borda do botão primário no estado hover */
+}
+
+.section {
+    padding: 80px 0; /* Adiciona preenchimento (padding) vertical de 80px em cima e embaixo das seções */
+}
+
+.section-title {
+    text-align: center; /* Centraliza o texto do título */
+    font-size: 40px; /* Define o tamanho da fonte */
+    font-weight: 900; /* Define o peso da fonte como extra-negrito */
+    margin-bottom: 60px; /* Adiciona uma margem inferior de 60px */
+    position: relative; /* Define a posição como relativa para posicionar o pseudo-elemento ::after */
+    color: white; /* Define a cor do texto do título */
+}
+
+.section-title::after { /* Cria uma linha decorativa azul abaixo do título da seção */
+    content: ''; /* Insere conteúdo vazio (obrigatório para que o pseudo-elemento seja exibido) */
+    display: block; /* Torna o pseudo-elemento um bloco para poder aplicar dimensões */
+    width: 80px; /* Define a largura da linha */
+    height: 4px; /* Define a altura (espessura) da linha */
+    background-color: var(--bs-primary); /* Usa a cor primária definida nas variáveis para a linha */
+    margin: 10px auto 0; /* Centraliza a linha horizontalmente e a posiciona 10px abaixo do título */
+    border-radius: 2px; /* Arredonda as bordas da linha */
+}
+
+/* --- SEÇÃO DO VÍDEO DE FUNDO --- */
+/* Estilos para o vídeo que roda em segundo plano na página. */
+
+#bg-video {
+    position: fixed; /* Posiciona o vídeo de forma fixa em relação à janela de visualização */
+    top: 0; /* Alinha o vídeo no topo da tela */
+    left: 0; /* Alinha o vídeo à esquerda da tela */
+    min-width: 100%; /* Garante que a largura do vídeo cubra sempre toda a tela */
+    min-height: 100%; /* Garante que a altura do vídeo cubra sempre toda a tela */
+    z-index: -1; /* Coloca o vídeo atrás de todo o outro conteúdo da página */
+    object-fit: cover; /* Redimensiona o vídeo para cobrir todo o contêiner, cortando o excesso se necessário */
+    filter: brightness(0.4); /* Reduz o brilho do vídeo para que o texto sobreposto seja mais legível */
+}
+
+.content-wrapper {
+    position: relative; /* Define a posição relativa para poder usar z-index */
+    z-index: 1; /* Garante que este contêiner e seu conteúdo fiquem na frente do vídeo de fundo */
+}
+
+/* --- SEÇÃO DA BARRA DE NAVEGAÇÃO (NAVBAR) --- */
+/* Estilos para a barra de navegação principal, incluindo o logo e os links. */
+
+.navbar {
+    background-color: rgba(18, 18, 18, 0.85); /* Fundo da navbar com transparência para ver o conteúdo atrás */
+    backdrop-filter: blur(10px); /* Aplica um efeito de desfoque (vidro fosco) no fundo da navbar */
+    border-bottom: 1px solid #282828; /* Adiciona uma borda inferior sutil para separação visual */
+}
+
+.logo {
+    font-size: 28px; /* Tamanho da fonte do logo */
+    font-weight: 900; /* Peso da fonte extra-negrito para destaque */
+    color: var(--bs-primary); /* Cor do logo definida pela variável primária */
+}
+
+.logo:hover {
+    color: var(--bs-primary); /* Mantém a cor do logo ao passar o mouse por cima */
+}
+
+.nav-link {
+    font-weight: 700; /* Deixa os links da navegação em negrito para melhor visualização */
+}
+
+/* --- SEÇÃO DO BANNER PRINCIPAL (CARROSSEL) --- */
+/* Estilos para o carrossel de imagens em tela cheia na parte superior da página. */
+
+.main-banner,
+.carousel-item {
+    height: 100vh; /* Define a altura para 100% da altura da tela */
+    min-height: 500px; /* Define uma altura mínima para o banner em telas menores ou com pouco conteúdo */
+}
+
+.carousel-item img {
+    height: 100%; /* Faz a imagem ocupar 100% da altura do seu contêiner (.carousel-item) */
+    object-fit: cover; /* Redimensiona a imagem para cobrir a área, cortando o excesso */
+    filter: brightness(0.4); /* Escurece a imagem para melhorar a legibilidade do texto da legenda */
+}
+
+.carousel-caption {
+    bottom: 50%; /* Remove o posicionamento padrão que é na parte inferior */
+    transform: translateY(50%); /* Centraliza a legenda verticalmente na tela */
+}
+
+.cta-button { /* Botão de Chamada para Ação (Call to Action) */
+    padding: 1rem 2.5rem; /* Preenchimento interno do botão */
+    font-size: 1.1rem; /* Tamanho da fonte do botão */
+    font-weight: 700; /* Peso da fonte em negrito */
+    text-transform: uppercase; /* Transforma o texto do botão para maiúsculas */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Adiciona uma transição suave para efeitos de hover */
+}
+
+.cta-button:hover {
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho do botão ao passar o mouse, criando um efeito de destaque */
+}
+
+/* --- SEÇÃO DE CARTÕES DE JOGOS --- */
+/* Estilos para os cards que exibem os diferentes jogos. */
+
+#games .row {
+    --bs-gutter-x: 1.5rem; /* Define o espaçamento horizontal (gutter) entre as colunas da grade */
+    --bs-gutter-y: 2rem; /* Define o espaçamento vertical entre as colunas da grade */
+}
+
+.game-card {
+    background-color: #1e1e1e; /* Cor de fundo do card */
+    border: none; /* Remove a borda padrão do card */
+    border-radius: 12px; /* Arredonda os cantos do card */
+    overflow: hidden; /* Esconde qualquer conteúdo que transborde (ex: cantos da imagem) */
+    text-align: center; /* Alinha o texto do card ao centro */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave para os efeitos de hover */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Adiciona uma sombra sutil ao card */
+    display: flex; /* Usa flexbox para o layout interno do card */
+    flex-direction: column; /* Organiza os itens filhos (imagem, corpo) em uma coluna */
+}
+
+.game-card:hover {
+    transform: translateY(-10px); /* Move o card 10px para cima ao passar o mouse */
+    box-shadow: 0 8px 30px rgba(0, 170, 255, 0.3); /* Adiciona uma sombra colorida e mais proeminente no hover */
+}
+
+.game-card .card-img-top {
+    height: 450px; /* Define uma altura fixa para a imagem do card */
+    object-fit: cover; /* Redimensiona a imagem para cobrir a área designada, cortando o excesso */
+}
+
+.game-card .card-body {
+    padding: 10px; /* Define o preenchimento interno do corpo do card */
+    display: flex; /* Usa flexbox para alinhar o conteúdo */
+    flex-direction: column; /* Organiza os itens em uma coluna */
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    flex-grow: 1; /* Faz com que o corpo do card ocupe o espaço restante */
+    min-height: 80px; /* Define uma altura mínima para garantir que todos os cards tenham a mesma altura */
+}
+
+.game-card .card-title {
+    font-size: 22px; /* Define o tamanho da fonte do título */
+    font-weight: 700; /* Define o peso da fonte como negrito */
+}
+
+
+/* --- SEÇÃO DE DEPOIMENTOS (TESTIMONIALS) --- */
+/* Estilos para a área de depoimentos de usuários/jogadores. */
+
+#testimonials {
+    background-color: #1a1a1a; /* Define uma cor de fundo para a seção, ligeiramente diferente do body */
+}
+
+.testimonial-card {
+    background-color: #2b2a2a; /* Cor de fundo do card de depoimento */
+    border: none; /* Remove a borda padrão */
+    border-radius: 12px; /* Arredonda os cantos do card */
+}
+
+.testimonial-avatar {
+    width: 80px; /* Largura do avatar (foto) */
+    height: 80px; /* Altura do avatar */
+    border-radius: 50%; /* Torna o avatar completamente circular */
+    border: 3px solid var(--bs-primary); /* Adiciona uma borda colorida ao redor do avatar */
+}
+
+.testimonial-text p {
+    font-style: italic; /* Aplica um estilo itálico ao texto do depoimento */
+    font-size: 18px; /* Define o tamanho da fonte */
+}
+
+/* --- SEÇÃO DE TORNEIOS (CARROSSEL SWIPER) --- */
+/* Estilos específicos para o carrossel de torneios, usando a biblioteca Swiper.js. */
+/* Inclui efeitos de zoom e opacidade para o slide ativo. */
+
+#tournaments {
+    position: relative; /* Define a posição como relativa para posicionamento de elementos filhos */
+    padding-left: 30px; /* Adiciona preenchimento nas laterais para que os slides vizinhos fiquem visíveis */
+    padding-right: 30px; /* Adiciona preenchimento nas laterais para que os slides vizinhos fiquem visíveis */
+}
+
+.tournament-swiper,
+.tournament-swiper .swiper-wrapper {
+    overflow: visible; /* Permite que os slides "vazem" para fora do contêiner, necessário para o efeito de zoom */
+}
+
+.tournament-swiper {
+    width: 100%; /* Define a largura para 100% */
+    padding-top: 40px; /* Adiciona preenchimento vertical para dar espaço ao efeito de zoom no slide ativo */
+    padding-bottom: 40px; /* Adiciona preenchimento vertical para dar espaço ao efeito de zoom no slide ativo */
+}
+
+.tournament-swiper .swiper-slide { /* Estilo padrão para todos os slides do carrossel */
+    height: auto; /* Define a altura automática baseada no conteúdo do card */
+    transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease; /* Adiciona transições suaves */
+    opacity: 0.4; /* Define a opacidade padrão dos slides inativos */
+    transform: scale(0.8); /* Reduz o tamanho dos slides inativos */
+    filter: brightness(0.5); /* Escurece os slides inativos */
+}
+
+.tournament-swiper .swiper-slide-prev,
+.tournament-swiper .swiper-slide-next { /* Estilo para o slide anterior e o próximo ao slide ativo */
+    opacity: 0.7; /* Aumenta a opacidade para torná-los mais visíveis que os outros slides inativos */
+    transform: scale(0.9); /* Aumenta ligeiramente o tamanho */
+    filter: brightness(0.8); /* Aumenta ligeiramente o brilho */
+}
+
+.tournament-swiper .swiper-slide-active { /* Estilo para o slide atualmente ativo (central) */
+    opacity: 1; /* Define a opacidade total */
+    transform: scale(1.15); /* Aumenta o tamanho do slide para criar um efeito de zoom */
+    filter: brightness(1); /* Define o brilho total */
+    z-index: 10; /* Garante que o slide ativo fique na frente dos outros */
+}
+
+.tournament-swiper .swiper-slide-active .tournament-card {
+    box-shadow: 0 0 25px 5px rgba(0, 170, 255, 0.5); /* Adiciona uma sombra especial ao card do torneio quando ele está ativo */
+}
+
+.tournament-card {
+    background-color: #1e1e1e; /* Cor de fundo do card */
+    border: 1px solid #282828; /* Adiciona uma borda sutil */
+    border-radius: 12px; /* Arredonda os cantos */
+    display: flex; /* Usa flexbox para organizar o conteúdo */
+    flex-direction: column; /* Organiza os itens em uma coluna */
+    height: 100%; /* Garante que o card ocupe 100% da altura do slide */
+}
+
+.tournament-card .card-body {
+    display: flex; /* Usa flexbox para organização interna */
+    flex-direction: column; /* Organiza os itens em uma coluna */
+    flex-grow: 1; /* Faz com que o corpo do card ocupe o espaço vertical disponível */
+}
+
+.tournament-card .btn {
+    margin-top: auto; /* Alinha o botão na parte inferior do card, útil quando os cards têm alturas de texto diferentes */
+}
+
+.tournament-card .card-img-top {
+    height: 200px; /* Define uma altura fixa para a imagem */
+    object-fit: cover; /* Redimensiona a imagem para cobrir a área, cortando o excesso */
+}
+
+.tournament-card .card-title {
+    font-size: 20px; /* Tamanho da fonte do título */
+    font-weight: 900; /* Peso da fonte extra-negrito */
+    min-height: 20px; /* Define uma altura mínima para evitar que o layout quebre com títulos de tamanhos diferentes */
+    display: flex; /* Usa flexbox */
+    align-items: center; /* Alinha o texto verticalmente dentro do espaço do título */
+}
+
+.tournament-info li { /* Estilo para os itens da lista de informações do torneio (prêmio, data, etc.) */
+    display: flex; /* Usa flexbox para alinhar o ícone e o texto */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    gap: 10px; /* Cria um espaço de 10px entre o ícone e o texto */
+    color: #ccc; /* Cor do texto da informação */
+    padding-bottom: 10px; /* Espaçamento inferior */
+    margin-bottom: 10px; /* Margem inferior */
+    border-bottom: 1px solid #282828; /* Adiciona uma linha separadora sutil abaixo de cada item */
+}
+
+.tournament-swiper .swiper-button-next,
+.tournament-swiper .swiper-button-prev { /* Estilo para os botões de navegação (setas) do Swiper */
+    color: #ffffff; /* Cor dos ícones das setas */
+    top: 50%; /* Posição vertical */
+    transform: translateY(-50%); /* Centraliza os botões verticalmente de forma precisa */
+}
+
+
+/* --- SEÇÃO DE FORMULÁRIOS (INSCRIÇÃO E CONTATO) --- */
+/* Estilos globais para formulários, como na página de inscrição ou no rodapé. */
+
+.registration-container {
+    background-color: rgba(18, 18, 18, 0.85); /* Fundo com transparência */
+    backdrop-filter: blur(10px); /* Efeito de desfoque (vidro fosco) */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil e translúcida */
+    border-radius: 12px; /* Cantos arredondados */
+    padding: 2rem; /* Preenchimento interno */
+    max-width: 800px; /* Largura máxima do contêiner do formulário */
+    margin-left: auto; /* Centraliza o contêiner horizontalmente */
+    margin-right: auto; /* Centraliza o contêiner horizontalmente */
+}
+
+@media (min-width: 768px) { /* Media query para telas maiores (tablets e desktops) */
+    .registration-container {
+        padding: 3rem; /* Aumenta o preenchimento em telas maiores para mais respiro */
+    }
+}
+
+.form-control {
+    background-color: rgba(40, 40, 40, 0.8) !important; /* Cor de fundo do campo de formulário (input) */
+    color: #fff !important; /* Cor do texto digitado no campo */
+    border-color: rgba(255, 255, 255, 0.2) !important; /* Cor da borda do campo */
+}
+
+.form-control::placeholder {
+    color: #a0a0a0; /* Cor do texto do placeholder (dica do campo) */
+}
+
+.form-control:focus {
+    color: #fff; /* Cor do texto ao focar no campo */
+    background-color: rgba(40, 40, 40, 0.8); /* Cor de fundo ao focar */
+    border-color: var(--bs-primary); /* Cor da borda ao focar, usando a cor primária */
+    box-shadow: 0 0 0 0.25rem rgba(0, 170, 255, 0.3); /* Sombra de foco para destaque (acessibilidade) */
+}
+
+.form-check-label a {
+    color: var(--bs-primary); /* Cor do link no label (ex: "Termos e Condições") */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+}
+
+.form-check-label a:hover {
+    text-decoration: underline; /* Adiciona sublinhado no hover para indicar que é clicável */
+}
+
+.tournament-confirmation-header .section-title {
+    margin-bottom: 1rem; /* Reduz a margem inferior do título na página de confirmação para um layout mais compacto */
+}
+
+.tournament-confirmation-header .section-title::after {
+    display: none; /* Esconde a linha decorativa do título na página de confirmação */
+}
+
+/* --- SEÇÃO DO RODAPÉ (FOOTER) --- */
+/* Estilos para o rodapé do site, incluindo a área de copyright. */
+
+.footer a {
+    text-decoration: none; /* Remove sublinhado dos links do rodapé para um visual mais limpo */
+}
+
+.footer-copyright {
+    background-color: #131212; /* Cor de fundo da área de copyright, um pouco diferente do fundo do body */
+    color: whitesmoke; /* Cor do texto do copyright */
+    padding: 1.5rem; /* Preenchimento interno */
+    text-align: center; /* Alinhamento do texto ao centro */
+    font-size: 1em; /* Tamanho da fonte */
+    margin-top: 2rem; /* Margem superior para separar do conteúdo acima */
+}

@@ -1,2 +1,2 @@
-# Universo_gamer_PI
-Django Framework, Html, Css, Java Script, Bootstrap5
+# Projeto_Final
+DJANGO FRAMEWORK, HTML, CSS, JAVA SCRIPT

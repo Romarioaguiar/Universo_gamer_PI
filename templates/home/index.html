@@ -1,0 +1,252 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universo Gamer - Explore, Jogue, Compita!</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#main-navbar">
+
+    <header>
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a href="/" class="navbar-brand logo">Universo Gamer</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-content"
+                    aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="nav-content">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Início</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#games">Jogos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="comunidade/">Comunidade</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#tournaments"
+                                id="show-tournaments-btn">Torneios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#footer">Contato</a></li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item d-flex align-items-center">
+                        <span class="me-2">Olá, <strong>{{ user.username }}</strong></span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Sair</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <div class="d-flex ms-lg-3">
+                        <a href="/accounts/login" class="btn btn-secondary me-2">Entrar</a>
+                        <a href="/accounts/register" class="btn btn-primary">Criar Conta</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="home" class="main-banner">
+            <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'img/gta6.jpg' %}" class="d-block w-100" alt="Banner GTA 6">
+                        <div class="carousel-caption d-none d-md-block text-center">
+                            <h1 class="display-3 fw-bolder">Explore o mundo dos jogos de PC</h1>
+                            <p class="lead">Descubra, jogue e conecte-se com gamers como você.</p>
+                            <a href="#games" class="btn btn-lg btn-primary cta-button">Comece Agora</a>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'img/cod7.jpg' %}" class="d-block w-100" alt="Banner Call of Duty">
+                        <div class="carousel-caption d-none d-md-block text-center">
+                            <h1 class="display-3 fw-bolder">Torneios Épicos Esperam por Você</h1>
+                            <p class="lead">Participe de competições emocionantes e mostre suas habilidades.</p>
+                            <a href="#tournaments" class="btn btn-lg btn-primary cta-button"
+                                id="carousel-tournaments-btn">Ver Torneios</a>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'img/btf6.jpg' %}" class="d-block w-100" alt="Banner The Division 2">
+                        <div class="carousel-caption d-none d-md-block text-center">
+                            <h1 class="display-3 fw-bolder">Uma Comunidade Vibrante</h1>
+                            <p class="lead">Encontre novos amigos e forme equipes para dominar o jogo.</p>
+                            <a href="comunidade/" class="btn btn-lg btn-primary cta-button">Junte-se à Comunidade</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="games" class="section">
+            <div class="container">
+                <h2 class="section-title">Destaques de Jogos</h2>
+                <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-lg-4">
+
+                    {% for jogo in jogos %}
+                    <div class="col">
+                        <div class="card game-card h-100">
+                            <img src="{{jogo.imagem.url}}" class="card-img-top" alt="Capa do jogo Counter-Strike 2">
+                            <div class="card-body">
+                                <h3 class="card-title">{{jogo.nome}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="section bg-dar-subtle">
+            <div class="container">
+                <h2 class="section-title">O que dizem nossos jogadores</h2>
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="testimonial-card card h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <img src="https://i.pravatar.cc/150?u=gamerx" alt="Avatar do GamerX"
+                                    class="testimonial-avatar">
+                                <div class="testimonial-text ms-3">
+                                    <p class="mb-2">“A melhor plataforma para descobrir novos jogos e fazer amizades!”
+                                    </p>
+                                    <span class="fw-bold text-primary">– @TarnishedOne</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="testimonial-card card h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <img src="https://i.pravatar.cc/150?u=noobmaster" alt="Avatar do NoobMaster"
+                                    class="testimonial-avatar">
+                                <div class="testimonial-text ms-3">
+                                    <p class="mb-2">“Interface linda e extremamente fácil de usar. Simplesmente
+                                        incrível.”</p>
+                                    <span class="fw-bold text-primary">– @NoobMaster</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      {% comment %} INÍCIO DA NOVA SEÇÃO DE TORNEIOS {% endcomment %}
+<section id="tournaments" class="section">
+    <div class="container">
+        <h2 class="section-title">Torneios Abertos</h2>
+    </div>
+
+    <div class="swiper tournament-swiper">
+        <div class="swiper-wrapper">
+
+            {% for torneio in torneios %}
+            <div class="swiper-slide">
+                <div class="card tournament-card h-100">
+                    <img src="{{ torneio.imagem.url }}" class="card-img-top" alt="Banner do torneio {{ torneio.nome }}">
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="card-title">{{ torneio.nome }}</h3>
+                        <ul class="list-unstyled tournament-info">
+                            <li><i class="fas fa-gamepad text-primary"></i> Jogo: {{ torneio.jogo }}</li>
+                            <li><i class="fas fa-trophy text-primary"></i> Prêmio: {{ torneio.premio }}</li>
+                            <li><i class="fas fa-calendar-alt text-primary"></i> Data: {{ torneio.data|date:"d/m/Y" }}</li>
+                            <li><i class="fas fa-users text-primary"></i> Formato: {{ torneio.formato }}</li>
+                        </ul>
+                        {% if torneio.link_inscricao %}
+                            <a href="{{ torneio.link_inscricao }}" class="btn btn-primary mt-auto" target="_blank" rel="noopener noreferrer">Inscreva-se Agora</a>
+                        {% else %}
+                            <a href="#" class="btn btn-secondary mt-auto disabled" aria-disabled="true">Inscrição Indisponível</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="swiper-slide">
+                <p class="text-center w-100">Nenhum torneio disponível no momento.</p>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+{% comment %} FIM DA NOVA SEÇÃO DE TORNEIOS {% endcomment %}
+
+    </main>
+
+    <footer id="footer" class="footer bg-dark text-white pt-5">
+        <div class="container text-center text-md-start">
+            <div class="row text-center text-md-start">
+
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Universo Gamer</h5>
+                    <p>Sua central definitiva para tudo sobre o mundo dos jogos de PC. Junte-se à nossa comunidade!</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-floating m-1"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-primary btn-floating m-1"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-primary btn-floating m-1"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Links Úteis</h5>
+                    <p><a href="#" class="text-white">Sobre Nós</a></p>
+                    <p><a href="#" class="text-white">Suporte</a></p>
+                    <p><a href="#" class="text-white">Termos de Serviço</a></p>
+                    <p><a href="#" class="text-white">Política de Privacidade</a></p>
+                </div>
+
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">Junte-se à nossa Newsletter</h5>
+                    <p>Receba as últimas notícias, lançamentos e ofertas diretamente no seu e-mail.</p>
+                    <form class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Seu e-mail" aria-label="Seu e-mail">
+                        <button class="btn btn-primary" type="submit">Inscrever-se</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <p class="mb-0">&copy; 2025 Universo Gamer. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+</body>
+
+</html>
